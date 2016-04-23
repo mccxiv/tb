@@ -4,7 +4,7 @@
   "description": "Twitch chat \"bouncer\".",
   "main": "index.js",
   "scripts": {
-    "start": "webpack && node _dist/server"
+    "start": "babel-node src/server"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +16,8 @@
     "express": "^4.13.4",
     "json-loader": "^0.5.4",
     "mongo": "^0.1.0",
-    "tmi.js": "0.0.29",
+    "tmi.js": "github:schmoopiie/tmi.js#next",
     "webpack": "^1.13.0"
-  }
+  },
+  "dependencies": {}
 }

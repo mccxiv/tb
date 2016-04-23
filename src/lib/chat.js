@@ -2,7 +2,6 @@ import tmi from 'tmi.js';
 import {saveMessage} from './store';
 
 const chat = new tmi.client({connection: {reconnect: true}});
-chat.connect();
 
 chat.on('action', saveAction);
 chat.on('chat', saveChat);
@@ -17,4 +16,4 @@ async function saveChat(channel, user, message) {
   catch(e) {console.warn(e)}
 }
 
-export default {join: chat.join, part: chat.part};
+export default chat;
