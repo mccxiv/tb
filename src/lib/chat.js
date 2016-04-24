@@ -1,5 +1,5 @@
 import tmi from 'tmi.js';
-import {saveMessage} from './store';
+import {saveMessage, requestedRecently} from './store';
 
 const chat = new tmi.client({connection: {reconnect: true}});
 
@@ -17,3 +17,9 @@ async function saveChat(channel, user, message) {
 }
 
 export default chat;
+
+export async function startChatClient() {
+  chat.connect();
+  const recent = await requestedRecently();
+  chat.once('connected', () => recent.forEach(chat.join.bind(chat)));
+}

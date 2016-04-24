@@ -3,11 +3,16 @@ import {daysToMs} from './helpers';
 
 const host = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tb';
 const db = MongoClient.connect(host);
+let counter = 0;
 
+setInterval(() => {
+  console.log('New messsages: ' + counter);
+  counter = 0;
+}, 30000);
 createIndex();
 
 async function createIndex() {
-  (await db).collection('requests').createIndex({channel: 1}, {unique: true});
+  (await requests()).createIndex({channel: 1}, {unique: true});
 }
 
 async function messages() {
@@ -18,10 +23,8 @@ async function requests() {
   return (await db).collection('requests');
 }
 
-// Public
-
 export async function saveMessage(msgObject) {
-  console.log('saving message!', msgObject.message);
+  counter++;
   const collection = await messages();
   return collection.insertOne(Object.assign(msgObject, {at: Date.now()}));
 }
@@ -39,6 +42,12 @@ export async function saveChannelRequest(channel) {
     {channel, at: Date.now()},
     {upsert: true}
   )
+}
+
+export async function requestedRecently() {
+  const query = {at: {$gt: Date.now() - daysToMs(2)}};
+  const arrayPromise = await (await requests()).find(query).toArray();
+  return (await arrayPromise).map((c) => c.channel);
 }
 
 export async function deleteOldMessages() {

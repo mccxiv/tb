@@ -2,13 +2,13 @@ import chat from './chat';
 import {saveChannelRequest} from './store';
 
 export function logRequest({params: {channel}}, res, next) {
-  console.log(channel, 'requested');
+  console.log('Requested channel: ' + channel);
   if (channel) saveChannelRequest(channel.toLowerCase());
   next();
 }
 
 export function joinChannel({params: {channel}}, res, next) {
-  if (channel) chat.join(channel);
+  if (channel && !chat.channels.includes('#' + channel)) chat.join(channel);
   next();
 }
 

@@ -4,7 +4,7 @@
   "description": "Twitch chat \"bouncer\".",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node src/server"
+    "start": "babel-node src/index"
   },
   "author": "",
   "license": "ISC",
