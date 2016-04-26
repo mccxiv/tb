@@ -2,7 +2,7 @@ import {MongoClient} from 'mongodb';
 import {daysToMs} from './helpers';
 
 const host = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tb';
-const db = MongoClient.connect(host);
+let db = Promise.reject('Database not yet connected');
 let counter = 0;
 
 setInterval(() => {
@@ -21,6 +21,10 @@ async function messages() {
 
 async function requests() {
   return (await db).collection('requests');
+}
+
+export function connectToDatabase(host) {
+  db = MongoClient.connect(host);
 }
 
 export async function saveMessage(msgObject) {
