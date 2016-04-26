@@ -4,12 +4,10 @@
   "description": "Twitch chat \"bouncer\".",
   "author": "Andrea Stella <adr.stella@gmail.com>",
   "license": "ISC",
-
   "scripts": {
     "start": "babel-node src/index",
     "build": "babel src -d dist"
   },
-
   "devDependencies": {
     "babel-cli": "^6.7.7",
     "babel-loader": "^6.2.4",
@@ -19,10 +17,10 @@
     "json-loader": "^0.5.4",
     "webpack": "^1.13.0"
   },
-
   "dependencies": {
-    "mongo": "^0.1.0",
+    "babel-runtime": "^6.6.1",
     "express": "^4.13.4",
+    "mongo": "^0.1.0",
     "tmi.js": "github:schmoopiie/tmi.js#next"
   }
 }
