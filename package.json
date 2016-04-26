@@ -4,14 +4,13 @@
   "description": "Twitch chat \"bouncer\".",
   "author": "Andrea Stella <adr.stella@gmail.com>",
   "license": "ISC",
-
   "scripts": {
     "start": "node dist/index"
   },
-
   "dependencies": {
-    "mongo": "^0.1.0",
+    "babel-runtime": "^6.6.1",
     "express": "^4.13.4",
+    "mongo": "^0.1.0",
     "tmi.js": "github:schmoopiie/tmi.js#next"
   }
 }
