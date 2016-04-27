@@ -32,12 +32,12 @@ export async function connectToDatabase(host) {
   }
 }
 
-export async function saveMessage(obj) {
-  if (obj.channel.charAt(0) === '#') obj.channel = channel.substring(1);
+export async function saveMessage(channel, user, message) {
   counter++;
+  if (channel.charAt(0) === '#') channel = channel.substring(1);
   const collection = await messages();
-  const withDate = Object.assign(obj, {at: nowInSeconds()});
-  return collection.insertOne(withDate);
+  const withTimestamp = {channel, user, message, at: nowInSeconds()};
+  return collection.insertOne(withTimestamp);
 }
 
 export async function getMessages(channel, after, before, limit) {

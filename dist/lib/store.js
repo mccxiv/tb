@@ -5,10 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.deleteOldMessages = exports.requestedRecently = exports.saveChannelRequest = exports.getMessages = exports.saveMessage = exports.connectToDatabase = undefined;
 
-var _assign = require('babel-runtime/core-js/object/assign');
-
-var _assign2 = _interopRequireDefault(_assign);
-
 var _regenerator = require('babel-runtime/regenerator');
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -133,21 +129,21 @@ var connectToDatabase = exports.connectToDatabase = function () {
 }();
 
 var saveMessage = exports.saveMessage = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(obj) {
-    var collection, withDate;
+  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5(channel, user, message) {
+    var collection, withTimestamp;
     return _regenerator2.default.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            if (obj.channel.charAt(0) === '#') obj.channel = channel.substring(1);
             counter++;
+            if (channel.charAt(0) === '#') channel = channel.substring(1);
             _context5.next = 4;
             return messages();
 
           case 4:
             collection = _context5.sent;
-            withDate = (0, _assign2.default)(obj, { at: (0, _helpers.nowInSeconds)() });
-            return _context5.abrupt('return', collection.insertOne(withDate));
+            withTimestamp = { channel: channel, user: user, message: message, at: (0, _helpers.nowInSeconds)() };
+            return _context5.abrupt('return', collection.insertOne(withTimestamp));
 
           case 7:
           case 'end':
@@ -156,7 +152,7 @@ var saveMessage = exports.saveMessage = function () {
       }
     }, _callee5, this);
   }));
-  return function saveMessage(_x2) {
+  return function saveMessage(_x2, _x3, _x4) {
     return ref.apply(this, arguments);
   };
 }();
@@ -188,7 +184,7 @@ var getMessages = exports.getMessages = function () {
       }
     }, _callee6, this);
   }));
-  return function getMessages(_x3, _x4, _x5, _x6) {
+  return function getMessages(_x5, _x6, _x7, _x8) {
     return ref.apply(this, arguments);
   };
 }();
@@ -215,7 +211,7 @@ var saveChannelRequest = exports.saveChannelRequest = function () {
       }
     }, _callee7, this);
   }));
-  return function saveChannelRequest(_x7) {
+  return function saveChannelRequest(_x9) {
     return ref.apply(this, arguments);
   };
 }();
