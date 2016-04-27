@@ -5,7 +5,8 @@
   "author": "Andrea Stella <adr.stella@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "start": "babel-node src/index",
+    "start-dev": "babel-node src/index",
+    "start": "node dist/index",
     "build": "babel src -d dist"
   },
   "devDependencies": {
