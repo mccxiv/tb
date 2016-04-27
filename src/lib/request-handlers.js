@@ -1,6 +1,22 @@
 import chat from './chat';
-import {isConnected} from './helpers'
+import {isConnected, nowInSeconds} from './helpers'
 import {saveChannelRequest, getMessages} from './store';
+
+const validate = {
+  after(timestamp) {
+    if (!Number.isInteger(timestamp)) {
+      const oneHour = 60 * 60;
+      timestamp = nowInSeconds() - oneHour;
+    }
+    return timestamp;
+  },
+  before(timestamp) {
+    return Number.isInteger(timestamp)? timestamp : nowInSeconds();
+  },
+  limit(number) {
+    return Number.isInteger(number)? number : 20;
+  }
+};
 
 export function logRequest({params: {channel}}, res, next) {
   console.log('Requested channel: ' + channel);
@@ -15,15 +31,12 @@ export function joinChannel({params: {channel}}, res, next) {
 
 export async function respond(req, res) {
   const channel = req.params.channel;
-  const start = Number(req.query.start);
-  const end = Number(req.query.end);
-  const limit = Number(req.query.limit);
-  const nums = [start, end, limit];
-  if (!channel || nums.some((n) => Number.isNaN(n))) {
-    res.status(400).json({error: 'Missing parameters.'});
-  }
+  const after = validate.after(req.query.after);
+  const before = validate.before(req.query.before);
+  const limit = validate.limit(req.query.limit);
+  if (!channel) res.status(400).json({error: 'Missing channel.'});
   else {
-    try {res.json(await getMessages(channel, start, end, limit))}
+    try {res.json(await getMessages(channel, after, before, limit))}
     catch (e) {res.status(500).json({error: 'Server error, sorry!'})}
   }
 }

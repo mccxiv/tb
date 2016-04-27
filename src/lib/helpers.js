@@ -8,8 +8,12 @@ export async function leaveOldChannels() {
   oldChannels.forEach((channel) => chat.part(channel));
 }
 
-export function daysToMs(days) {
-  return minutesToMs(days * 24 * 60);
+export function nowInSeconds() {
+  return Math.round(Date.now() / 1000);
+}
+
+export function daysToSec(days) {
+  return days * 24 * 60 * 60;
 }
 
 export function minutesToMs(minutes) {

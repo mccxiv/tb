@@ -1,5 +1,5 @@
 import {MongoClient} from 'mongodb';
-import {daysToMs} from './helpers';
+import {daysToSec, nowInSeconds} from './helpers';
 
 let db = Promise.reject('Database not yet connected');
 let counter = 0;
@@ -35,12 +35,13 @@ export async function connectToDatabase(host) {
 export async function saveMessage(msgObject) {
   counter++;
   const collection = await messages();
-  return collection.insertOne(Object.assign(msgObject, {at: Date.now()}));
+  const withDate = Object.assign(msgObject, {at: nowInSeconds()});
+  return collection.insertOne(withDate);
 }
 
-export async function getMessages(channel, startTime, endTime, limit) {
+export async function getMessages(channel, after, before, limit) {
   const coll = await messages();
-  const query = {channel, at: {$gt: startTime, $lt: endTime}};
+  const query = {channel, at: {$gt: after, $lt: before}};
   const c = coll.find(query).sort({at: -1}).limit(limit);
   return await c.toArray();
 }
@@ -48,19 +49,19 @@ export async function getMessages(channel, startTime, endTime, limit) {
 export async function saveChannelRequest(channel) {
   return (await requests()).updateOne(
     {channel},
-    {channel, at: Date.now()},
+    {channel, at: nowInSeconds()},
     {upsert: true}
   )
 }
 
 export async function requestedRecently() {
-  const query = {at: {$gt: Date.now() - daysToMs(2)}};
+  const query = {at: {$gt: nowInSeconds() - daysToSec(2)}};
   const arrayPromise = await (await requests()).find(query).toArray();
   return (await arrayPromise).map((c) => c.channel);
 }
 
 export async function deleteOldMessages() {
-  const twoDaysAgo = Date.now() - daysToMs(2);
+  const twoDaysAgo = nowInSeconds() - daysToSec(2);
   const coll = await messages();
   const arr = await coll.deleteMany({at: {$lt: twoDaysAgo}}).toArray();
   return arr.length? arr[0].at : false;
