@@ -32,17 +32,18 @@ export async function connectToDatabase(host) {
   }
 }
 
-export async function saveMessage(msgObject) {
+export async function saveMessage(obj) {
+  if (obj.channel.charAt(0) === '#') obj.channel = channel.substring(1);
   counter++;
   const collection = await messages();
-  const withDate = Object.assign(msgObject, {at: nowInSeconds()});
+  const withDate = Object.assign(obj, {at: nowInSeconds()});
   return collection.insertOne(withDate);
 }
 
 export async function getMessages(channel, after, before, limit) {
   const coll = await messages();
   const query = {channel, at: {$gt: after, $lt: before}};
-  const c = coll.find(query).sort({at: -1}).limit(limit);
+  const c = coll.find(query, {_id: false}).sort({at: -1}).limit(limit);
   return await c.toArray();
 }
 
