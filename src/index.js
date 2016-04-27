@@ -1,3 +1,4 @@
+import './lib/polyfills';
 import {startServer} from './lib/server';
 import {connectToDatabase} from './lib/store';
 import {startChatClient} from './lib/chat';

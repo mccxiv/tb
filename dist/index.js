@@ -1,5 +1,7 @@
 'use strict';
 
+require('./lib/polyfills');
+
 var _server = require('./lib/server');
 
 var _store = require('./lib/store');
