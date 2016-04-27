@@ -20,7 +20,7 @@
   "dependencies": {
     "babel-runtime": "^6.6.1",
     "express": "^4.13.4",
-    "mongo": "^0.1.0",
+    "mongodb": "^2.1.17",
     "tmi.js": "github:schmoopiie/tmi.js#next"
   }
 }

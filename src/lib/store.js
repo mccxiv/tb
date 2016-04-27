@@ -1,9 +1,9 @@
 import {MongoClient} from 'mongodb';
 import {daysToMs} from './helpers';
 
-const host = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tb';
 let db = Promise.reject('Database not yet connected');
 let counter = 0;
+const options = {server: {reconnectTries: Infinity}};
 
 setInterval(() => {
   console.log('New messsages: ' + counter);
@@ -23,8 +23,13 @@ async function requests() {
   return (await db).collection('requests');
 }
 
-export function connectToDatabase(host) {
-  db = MongoClient.connect(host);
+export async function connectToDatabase(host) {
+  db = MongoClient.connect(host, options);
+  try {await db}
+  catch(e) {
+    console.warn('Could not connect to database.');
+    setTimeout(() => connectToDatabase(host), 5000);
+  }
 }
 
 export async function saveMessage(msgObject) {
@@ -36,8 +41,8 @@ export async function saveMessage(msgObject) {
 export async function getMessages(channel, startTime, endTime, limit) {
   const coll = await messages();
   const query = {channel, at: {$gt: startTime, $lt: endTime}};
-  const c = await coll.find(query).sort({at: -1}).limit(limit).sort({at: 1});
-  return c.toArray();
+  const c = coll.find(query).sort({at: -1}).limit(limit);
+  return await c.toArray();
 }
 
 export async function saveChannelRequest(channel) {

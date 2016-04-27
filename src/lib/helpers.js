@@ -19,3 +19,7 @@ export function minutesToMs(minutes) {
 export function missingFromFirst(firstArr, secondArr) {
   return secondArr.filter((element) => !firstArr.includes(element));
 }
+
+export function isConnected(channel) {
+  return chat.channels.includes('#' + channel);
+}
