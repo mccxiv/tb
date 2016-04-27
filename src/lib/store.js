@@ -43,8 +43,9 @@ export async function saveMessage(channel, user, message) {
 export async function getMessages(channel, after, before, limit) {
   const coll = await messages();
   const query = {channel, at: {$gt: after, $lt: before}};
-  const c = coll.find(query, {_id: false}).sort({at: -1}).limit(limit);
-  return await c.toArray();
+  const c = coll.find(query, {_id: false}).sort({_id: -1}).limit(limit);
+  const arr = await c.toArray();
+  return arr.reverse(); 
 }
 
 export async function saveChannelRequest(channel) {
