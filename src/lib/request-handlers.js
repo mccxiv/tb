@@ -4,6 +4,7 @@ import {saveChannelRequest, getMessages} from './store';
 
 const validate = {
   after(timestamp) {
+    timestamp = Number(timestamp);
     if (!Number.isInteger(timestamp)) {
       const oneHour = 60 * 60;
       timestamp = nowInSeconds() - oneHour;
@@ -11,9 +12,11 @@ const validate = {
     return timestamp;
   },
   before(timestamp) {
+    timestamp = Number(timestamp);
     return Number.isInteger(timestamp)? timestamp : nowInSeconds();
   },
   limit(number) {
+    number = Number(number);
     return Number.isInteger(number)? number : 30;
   }
 };

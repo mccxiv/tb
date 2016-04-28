@@ -83,6 +83,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var validate = {
   after: function after(timestamp) {
+    timestamp = Number(timestamp);
     if (!(0, _isInteger2.default)(timestamp)) {
       var oneHour = 60 * 60;
       timestamp = (0, _helpers.nowInSeconds)() - oneHour;
@@ -90,9 +91,11 @@ var validate = {
     return timestamp;
   },
   before: function before(timestamp) {
+    timestamp = Number(timestamp);
     return (0, _isInteger2.default)(timestamp) ? timestamp : (0, _helpers.nowInSeconds)();
   },
   limit: function limit(number) {
+    number = Number(number);
     return (0, _isInteger2.default)(number) ? number : 30;
   }
 };

@@ -41,6 +41,9 @@ export async function saveMessage(channel, user, message) {
 }
 
 export async function getMessages(channel, after, before, limit) {
+  console.log('after:', after);
+  console.log('before:', before);
+  console.log('limit:', limit);
   const coll = await messages();
   const query = {channel, at: {$gt: after, $lt: before}};
   const fields = {_id: false, channel: false};

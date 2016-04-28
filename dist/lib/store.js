@@ -164,22 +164,25 @@ var getMessages = exports.getMessages = function () {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
-            _context6.next = 2;
+            console.log('after:', after);
+            console.log('before:', before);
+            console.log('limit:', limit);
+            _context6.next = 5;
             return messages();
 
-          case 2:
+          case 5:
             coll = _context6.sent;
             query = { channel: channel, at: { $gt: after, $lt: before } };
             fields = { _id: false, channel: false };
             c = coll.find(query, fields).sort({ _id: -1 }).limit(limit);
-            _context6.next = 8;
+            _context6.next = 11;
             return c.toArray();
 
-          case 8:
+          case 11:
             arr = _context6.sent;
             return _context6.abrupt('return', arr.reverse());
 
-          case 10:
+          case 13:
           case 'end':
             return _context6.stop();
         }
