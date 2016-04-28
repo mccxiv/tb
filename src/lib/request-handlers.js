@@ -14,7 +14,7 @@ const validate = {
     return Number.isInteger(timestamp)? timestamp : nowInSeconds();
   },
   limit(number) {
-    return Number.isInteger(number)? number : 20;
+    return Number.isInteger(number)? number : 30;
   }
 };
 
