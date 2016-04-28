@@ -93,7 +93,7 @@ var validate = {
     return (0, _isInteger2.default)(timestamp) ? timestamp : (0, _helpers.nowInSeconds)();
   },
   limit: function limit(number) {
-    return (0, _isInteger2.default)(number) ? number : 20;
+    return (0, _isInteger2.default)(number) ? number : 30;
   }
 };
 

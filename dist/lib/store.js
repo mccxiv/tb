@@ -159,7 +159,7 @@ var saveMessage = exports.saveMessage = function () {
 
 var getMessages = exports.getMessages = function () {
   var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee6(channel, after, before, limit) {
-    var coll, query, c;
+    var coll, query, fields, c, arr;
     return _regenerator2.default.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
@@ -170,14 +170,16 @@ var getMessages = exports.getMessages = function () {
           case 2:
             coll = _context6.sent;
             query = { channel: channel, at: { $gt: after, $lt: before } };
-            c = coll.find(query, { _id: false }).sort({ at: -1 }).limit(limit);
-            _context6.next = 7;
+            fields = { _id: false, channel: false };
+            c = coll.find(query, fields).sort({ _id: -1 }).limit(limit);
+            _context6.next = 8;
             return c.toArray();
 
-          case 7:
-            return _context6.abrupt('return', _context6.sent);
-
           case 8:
+            arr = _context6.sent;
+            return _context6.abrupt('return', arr.reverse());
+
+          case 10:
           case 'end':
             return _context6.stop();
         }
