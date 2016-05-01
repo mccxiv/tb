@@ -1,5 +1,5 @@
 import {MongoClient} from 'mongodb';
-import {daysToSec, nowInSeconds} from './helpers';
+import {daysToMs} from './helpers';
 
 let db = Promise.reject('Database not yet connected');
 let counter = 0;
@@ -36,7 +36,7 @@ export async function saveMessage(channel, user, message) {
   counter++;
   if (channel.charAt(0) === '#') channel = channel.substring(1);
   const collection = await messages();
-  const withTimestamp = {channel, user, message, at: nowInSeconds()};
+  const withTimestamp = {channel, user, message, at: Date.now()};
   return collection.insertOne(withTimestamp);
 }
 
@@ -55,19 +55,19 @@ export async function getMessages(channel, after, before, limit) {
 export async function saveChannelRequest(channel) {
   return (await requests()).updateOne(
     {channel},
-    {channel, at: nowInSeconds()},
+    {channel, at: Date.now()},
     {upsert: true}
   )
 }
 
 export async function requestedRecently() {
-  const query = {at: {$gt: nowInSeconds() - daysToSec(2)}};
+  const query = {at: {$gt: Date.now() - daysToMs(2)}};
   const arrayPromise = await (await requests()).find(query).toArray();
   return (await arrayPromise).map((c) => c.channel);
 }
 
 export async function deleteOldMessages() {
-  const twoDaysAgo = nowInSeconds() - daysToSec(2);
+  const twoDaysAgo = Date.now() - daysToMs(2);
   const coll = await messages();
   const arr = await coll.deleteMany({at: {$lt: twoDaysAgo}}).toArray();
   return arr.length? arr[0].at : false;

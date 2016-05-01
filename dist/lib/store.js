@@ -142,7 +142,7 @@ var saveMessage = exports.saveMessage = function () {
 
           case 4:
             collection = _context5.sent;
-            withTimestamp = { channel: channel, user: user, message: message, at: (0, _helpers.nowInSeconds)() };
+            withTimestamp = { channel: channel, user: user, message: message, at: Date.now() };
             return _context5.abrupt('return', collection.insertOne(withTimestamp));
 
           case 7:
@@ -205,7 +205,7 @@ var saveChannelRequest = exports.saveChannelRequest = function () {
 
           case 2:
             _context7.t0 = { channel: channel };
-            _context7.t1 = { channel: channel, at: (0, _helpers.nowInSeconds)() };
+            _context7.t1 = { channel: channel, at: Date.now() };
             _context7.t2 = { upsert: true };
             return _context7.abrupt('return', _context7.sent.updateOne(_context7.t0, _context7.t1, _context7.t2));
 
@@ -228,7 +228,7 @@ var requestedRecently = exports.requestedRecently = function () {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
-            query = { at: { $gt: (0, _helpers.nowInSeconds)() - (0, _helpers.daysToSec)(2) } };
+            query = { at: { $gt: Date.now() - (0, _helpers.daysToMs)(2) } };
             _context8.next = 3;
             return requests();
 
@@ -268,7 +268,7 @@ var deleteOldMessages = exports.deleteOldMessages = function () {
       while (1) {
         switch (_context9.prev = _context9.next) {
           case 0:
-            twoDaysAgo = (0, _helpers.nowInSeconds)() - (0, _helpers.daysToSec)(2);
+            twoDaysAgo = Date.now() - (0, _helpers.daysToMs)(2);
             _context9.next = 3;
             return messages();
 

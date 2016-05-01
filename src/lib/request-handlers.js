@@ -1,19 +1,19 @@
 import chat from './chat';
-import {isConnected, nowInSeconds} from './helpers'
+import {isConnected} from './helpers'
 import {saveChannelRequest, getMessages} from './store';
 
 const validate = {
   after(timestamp) {
     timestamp = Number(timestamp);
     if (!Number.isInteger(timestamp)) {
-      const oneHour = 60 * 60;
-      timestamp = nowInSeconds() - oneHour;
+      const oneHour = 1000 * 60 * 60;
+      timestamp = Date.now() - oneHour;
     }
     return timestamp;
   },
   before(timestamp) {
     timestamp = Number(timestamp);
-    return Number.isInteger(timestamp)? timestamp : nowInSeconds();
+    return Number.isInteger(timestamp)? timestamp : Date.now();
   },
   limit(number) {
     number = Number(number);

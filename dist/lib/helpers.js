@@ -46,8 +46,7 @@ var leaveOldChannels = exports.leaveOldChannels = function () {
   };
 }();
 
-exports.nowInSeconds = nowInSeconds;
-exports.daysToSec = daysToSec;
+exports.daysToMs = daysToMs;
 exports.minutesToMs = minutesToMs;
 exports.missingFromFirst = missingFromFirst;
 exports.isConnected = isConnected;
@@ -60,12 +59,8 @@ var _store = require('./store');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function nowInSeconds() {
-  return Math.round(Date.now() / 1000);
-}
-
-function daysToSec(days) {
-  return days * 24 * 60 * 60;
+function daysToMs(days) {
+  return minutesToMs(days * 24 * 60);
 }
 
 function minutesToMs(minutes) {

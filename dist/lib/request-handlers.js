@@ -85,14 +85,14 @@ var validate = {
   after: function after(timestamp) {
     timestamp = Number(timestamp);
     if (!(0, _isInteger2.default)(timestamp)) {
-      var oneHour = 60 * 60;
-      timestamp = (0, _helpers.nowInSeconds)() - oneHour;
+      var oneHour = 1000 * 60 * 60;
+      timestamp = Date.now() - oneHour;
     }
     return timestamp;
   },
   before: function before(timestamp) {
     timestamp = Number(timestamp);
-    return (0, _isInteger2.default)(timestamp) ? timestamp : (0, _helpers.nowInSeconds)();
+    return (0, _isInteger2.default)(timestamp) ? timestamp : Date.now();
   },
   limit: function limit(number) {
     number = Number(number);
