@@ -12,7 +12,7 @@
 Query parameters:  
 `after` - Get messages after this timestamp in milliseconds. Default: one hour ago  
 `before`: Get messages before this timestamp in milliseconds. Default: now  
-`limit`: Only grab up to this many messages, removing older ones first
+`limit`: Only grab up to this many messages, removing older ones first. Default: 30
 
 Requirements:
 - MongoDB
