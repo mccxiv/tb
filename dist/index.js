@@ -11,7 +11,7 @@ var _chat = require('./lib/chat');
 var _helpers = require('./lib/helpers');
 
 var PORT = 6255;
-var DB = 'mongodb://localhost:27017/tb';
+var DB = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tb';
 
 (0, _store.connectToDatabase)(DB);
 (0, _server.startServer)(PORT);
