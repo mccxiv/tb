@@ -1,74 +1,66 @@
-import {MongoClient} from 'mongodb';
+import sqlite3 from 'sqlite3';
 import {daysToMs} from './helpers';
 
-let db = Promise.reject('Database not yet connected');
+let db;
 let counter = 0;
-const options = {server: {reconnectTries: Infinity}};
 
 setInterval(() => {
   console.log('New messsages: ' + counter);
   counter = 0;
 }, 30000);
-createIndex();
 
-async function createIndex() {
-  (await requests()).createIndex({channel: 1}, {unique: true});
+async function createTables() {
+  db.run('CREATE TABLE IF NOT EXISTS lines (at INTEGER, channel TEXT, line TEXT)');
+  db.run('CREATE TABLE IF NOT EXISTS requests (channel TEXT UNIQUE, at INTEGER)');
 }
 
-async function messages() {
-  return (await db).collection('messages');
-}
-
-async function requests() {
-  return (await db).collection('requests');
-}
-
-export async function connectToDatabase(host) {
-  db = MongoClient.connect(host, options);
-  try {await db}
-  catch(e) {
-    console.warn('Could not connect to database.');
-    setTimeout(() => connectToDatabase(host), 5000);
-  }
+export function connectToDatabase(host) {
+  db = new sqlite3.Database(host);
+  createTables();
 }
 
 export async function saveMessage(channel, user, message) {
   counter++;
   if (channel.charAt(0) === '#') channel = channel.substring(1);
-  const collection = await messages();
-  const withTimestamp = {channel, user, message, at: Date.now()};
-  return collection.insertOne(withTimestamp);
+
+  const data = {channel, user, message, at: Date.now()};
+  const statement = 'INSERT INTO lines VALUES(?, ?, ?)';
+  const values = [data.at, channel, JSON.stringify(data)];
+  db.run(statement, values);
 }
 
 export async function getMessages(channel, after, before, limit) {
-  console.log('after:', after);
-  console.log('before:', before);
-  console.log('limit:', limit);
-  const coll = await messages();
-  const query = {channel, at: {$gt: after, $lt: before}};
-  const fields = {_id: false, channel: false};
-  const c = coll.find(query, fields).sort({_id: -1}).limit(limit);
-  const arr = await c.toArray();
-  return arr.reverse(); 
+  const statement = 'SELECT * FROM lines WHERE ' +
+    'channel = ? AND at > ? AND at < ? ' +
+    'ORDER BY at DESC LIMIT ?';
+  const values = [channel, after, before, limit];
+  return new Promise((resolve, reject) => {
+    db.all(statement, values, (e, results) => {
+      if (e) reject(e);
+      else resolve(results.map(r => JSON.parse(r.line)).reverse());
+    });
+  });
 }
 
-export async function saveChannelRequest(channel) {
-  return (await requests()).updateOne(
-    {channel},
-    {channel, at: Date.now()},
-    {upsert: true}
-  )
+export function saveChannelRequest(channel) {
+  const st = 'INSERT OR REPLACE INTO requests VALUES(?, ?)';
+  const values = [channel, Date.now()];
+  db.run(st, values);
 }
 
 export async function requestedRecently() {
-  const query = {at: {$gt: Date.now() - daysToMs(2)}};
-  const arrayPromise = await (await requests()).find(query).toArray();
-  return (await arrayPromise).map((c) => c.channel);
+  const st = 'SELECT channel FROM requests WHERE at > ?';
+  const values = [Date.now() - daysToMs(2)];
+  return new Promise((resolve, reject) => {
+    db.all(st, values, (e, results) => {
+      if (e) reject(e);
+      else resolve(results.map(r => r.channel));
+    });
+  });
 }
 
 export async function deleteOldMessages() {
   const twoDaysAgo = Date.now() - daysToMs(2);
-  const coll = await messages();
-  const arr = await coll.deleteMany({at: {$lt: twoDaysAgo}}).toArray();
-  return arr.length? arr[0].at : false;
+  const statement = 'DELETE FROM lines WHERE at < ?';
+  db.run(statement, [twoDaysAgo]);
 }
