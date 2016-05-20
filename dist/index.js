@@ -1,5 +1,9 @@
 'use strict';
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 require('./lib/polyfills');
 
 var _server = require('./lib/server');
@@ -10,8 +14,10 @@ var _chat = require('./lib/chat');
 
 var _helpers = require('./lib/helpers');
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var PORT = process.env.PORT || 6255;
-var DB = process.env.MONGODB_URI || 'mongodb://localhost:27017/tb';
+var DB = _path2.default.resolve(__dirname, '..', 'db', 'db.sqlite');
 
 (0, _store.connectToDatabase)(DB);
 (0, _server.startServer)(PORT);
