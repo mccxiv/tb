@@ -17,7 +17,7 @@ var _helpers = require('./lib/helpers');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var PORT = process.env.PORT || 6255;
-var DB = _path2.default.resolve(__dirname, '..', 'db', 'db.sqlite');
+var DB = _path2.default.resolve(__dirname, '..', 'db.sqlite');
 
 (0, _store.connectToDatabase)(DB);
 (0, _server.startServer)(PORT);
