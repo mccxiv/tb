@@ -6,7 +6,7 @@ import {deleteOldMessages} from './lib/store';
 import {leaveOldChannels, minutesToMs} from './lib/helpers';
 
 const PORT = 6255;
-const DB = 'mongodb://localhost:27017/tb';
+const DB = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tb';
 
 connectToDatabase(DB);
 startServer(PORT);
