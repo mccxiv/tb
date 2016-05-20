@@ -7,7 +7,7 @@ import {deleteOldMessages} from './lib/store';
 import {leaveOldChannels, minutesToMs} from './lib/helpers';
 
 const PORT = process.env.PORT || 6255;
-const DB = path.resolve(__dirname, '..', 'db','db.sqlite');
+const DB = path.resolve(__dirname, '..', 'db.sqlite');
 
 connectToDatabase(DB);
 startServer(PORT);

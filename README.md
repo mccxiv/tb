@@ -15,7 +15,7 @@ Query parameters:
 `limit`: Only grab up to this many messages, removing older ones first. Default: 30
 
 Requirements:
-- MongoDB
+- Persistent disk space
 - Node.js
 - Port 6255 available
 
@@ -52,7 +52,6 @@ Requirements:
 ### Setup and usage
 It's currently not very customizable, sorry.
 
-- Make sure MongoDB is up and running, it will use the `/tb` database
 - Clone repo
 - Cd into it
 - Run `npm i`
