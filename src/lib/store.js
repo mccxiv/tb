@@ -12,6 +12,7 @@ setInterval(() => {
 async function createTables() {
   db.run('CREATE TABLE IF NOT EXISTS lines (at INTEGER, channel TEXT, line TEXT)');
   db.run('CREATE TABLE IF NOT EXISTS requests (channel TEXT UNIQUE, at INTEGER)');
+  db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
 }
 
 export function connectToDatabase(host) {
@@ -29,7 +30,7 @@ export async function saveMessage(channel, user, message) {
   db.run(statement, values);
 }
 
-export async function getMessages(channel, after, before, limit) {
+export async function getMessagesJson(channel, after, before, limit) {
   const statement = 'SELECT * FROM lines WHERE ' +
     'channel = ? AND at > ? AND at < ? ' +
     'ORDER BY at DESC LIMIT ?';
@@ -37,7 +38,10 @@ export async function getMessages(channel, after, before, limit) {
   return new Promise((resolve, reject) => {
     db.all(statement, values, (e, results) => {
       if (e) reject(e);
-      else resolve(results.map(r => JSON.parse(r.line)).reverse());
+      else {
+        const lines = results.map(r => r.line).reverse();
+        resolve('['+lines.join(',')+']');
+      }
     });
   });
 }

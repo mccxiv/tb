@@ -1,6 +1,6 @@
 import chat from './chat';
 import {isConnected} from './helpers'
-import {saveChannelRequest, getMessages} from './store';
+import {saveChannelRequest, getMessagesJson} from './store';
 
 const validate = {
   after(timestamp) {
@@ -39,7 +39,8 @@ export async function respond(req, res) {
   const limit = validate.limit(req.query.limit);
   if (!channel) res.status(400).json({error: 'Missing channel.'});
   else {
-    try {res.json(await getMessages(channel, after, before, limit))}
+    res.header('Content-Type', 'application/json');
+    try {res.send(await getMessagesJson(channel, after, before, limit))}
     catch (e) {res.status(500).json({error: 'Server error, sorry!'})}
   }
 }
