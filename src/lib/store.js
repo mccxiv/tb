@@ -13,6 +13,7 @@ async function createTables() {
   db.run('CREATE TABLE IF NOT EXISTS lines (at INTEGER, channel TEXT, line TEXT)');
   db.run('CREATE TABLE IF NOT EXISTS requests (channel TEXT UNIQUE, at INTEGER)');
   db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
+  db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
 }
 
 export function connectToDatabase(host) {
