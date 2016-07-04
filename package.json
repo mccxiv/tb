@@ -1,6 +1,6 @@
 {
   "name": "tb",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Twitch chat \"bouncer\".",
   "author": "Andrea Stella <adr.stella@gmail.com>",
   "license": "ISC",
