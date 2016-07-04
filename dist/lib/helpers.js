@@ -14,7 +14,7 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var leaveOldChannels = exports.leaveOldChannels = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
     var noHashChannels, recent, oldChannels;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -41,8 +41,9 @@ var leaveOldChannels = exports.leaveOldChannels = function () {
       }
     }, _callee, this);
   }));
+
   return function leaveOldChannels() {
-    return ref.apply(this, arguments);
+    return _ref.apply(this, arguments);
   };
 }();
 

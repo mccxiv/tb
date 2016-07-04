@@ -14,7 +14,7 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var joinInitialChannels = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -42,13 +42,14 @@ var joinInitialChannels = function () {
       }
     }, _callee, this, [[0, 7]]);
   }));
+
   return function joinInitialChannels() {
-    return ref.apply(this, arguments);
+    return _ref.apply(this, arguments);
   };
 }();
 
 var startChatClient = exports.startChatClient = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -62,8 +63,9 @@ var startChatClient = exports.startChatClient = function () {
       }
     }, _callee2, this);
   }));
+
   return function startChatClient() {
-    return ref.apply(this, arguments);
+    return _ref2.apply(this, arguments);
   };
 }();
 
@@ -79,6 +81,7 @@ var chat = new _tmi2.default.client({ connection: { reconnect: true } });
 
 chat.on('action', _store.saveMessage);
 chat.on('chat', _store.saveMessage);
+chat.on('cheer', _store.saveMessage);
 chat.once('connected', joinInitialChannels);
 
 exports.default = chat;

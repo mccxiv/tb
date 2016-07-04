@@ -18,7 +18,7 @@ var _isInteger = require('babel-runtime/core-js/number/is-integer');
 var _isInteger2 = _interopRequireDefault(_isInteger);
 
 var respond = exports.respond = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(req, res) {
+  var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(req, res) {
     var channel, after, before, limit;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -35,36 +35,38 @@ var respond = exports.respond = function () {
             }
 
             res.status(400).json({ error: 'Missing channel.' });
-            _context.next = 19;
+            _context.next = 20;
             break;
 
           case 8:
-            _context.prev = 8;
+            res.header('Content-Type', 'application/json');
+            _context.prev = 9;
             _context.t0 = res;
-            _context.next = 12;
-            return (0, _store.getMessages)(channel, after, before, limit);
+            _context.next = 13;
+            return (0, _store.getMessagesJson)(channel, after, before, limit);
 
-          case 12:
+          case 13:
             _context.t1 = _context.sent;
 
-            _context.t0.json.call(_context.t0, _context.t1);
+            _context.t0.send.call(_context.t0, _context.t1);
 
-            _context.next = 19;
+            _context.next = 20;
             break;
 
-          case 16:
-            _context.prev = 16;
-            _context.t2 = _context['catch'](8);
+          case 17:
+            _context.prev = 17;
+            _context.t2 = _context['catch'](9);
             res.status(500).json({ error: 'Server error, sorry!' });
-          case 19:
+          case 20:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[8, 16]]);
+    }, _callee, this, [[9, 17]]);
   }));
+
   return function respond(_x, _x2) {
-    return ref.apply(this, arguments);
+    return _ref3.apply(this, arguments);
   };
 }();
 

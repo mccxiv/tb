@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deleteOldMessages = exports.requestedRecently = exports.getMessages = exports.saveMessage = undefined;
+exports.deleteOldMessages = exports.requestedRecently = exports.getMessagesJson = exports.saveMessage = undefined;
 
 var _promise = require('babel-runtime/core-js/promise');
 
@@ -22,28 +22,31 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var createTables = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             db.run('CREATE TABLE IF NOT EXISTS lines (at INTEGER, channel TEXT, line TEXT)');
             db.run('CREATE TABLE IF NOT EXISTS requests (channel TEXT UNIQUE, at INTEGER)');
+            db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
+            db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
 
-          case 2:
+          case 4:
           case 'end':
             return _context.stop();
         }
       }
     }, _callee, this);
   }));
+
   return function createTables() {
-    return ref.apply(this, arguments);
+    return _ref.apply(this, arguments);
   };
 }();
 
 var saveMessage = exports.saveMessage = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(channel, user, message) {
+  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(channel, user, message) {
     var data, statement, values;
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
@@ -65,13 +68,14 @@ var saveMessage = exports.saveMessage = function () {
       }
     }, _callee2, this);
   }));
+
   return function saveMessage(_x, _x2, _x3) {
-    return ref.apply(this, arguments);
+    return _ref2.apply(this, arguments);
   };
 }();
 
-var getMessages = exports.getMessages = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(channel, after, before, limit) {
+var getMessagesJson = exports.getMessagesJson = function () {
+  var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(channel, after, before, limit) {
     var statement, values;
     return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
@@ -81,9 +85,12 @@ var getMessages = exports.getMessages = function () {
             values = [channel, after, before, limit];
             return _context3.abrupt('return', new _promise2.default(function (resolve, reject) {
               db.all(statement, values, function (e, results) {
-                if (e) reject(e);else resolve(results.map(function (r) {
-                  return JSON.parse(r.line);
-                }).reverse());
+                if (e) reject(e);else {
+                  var lines = results.map(function (r) {
+                    return r.line;
+                  }).reverse();
+                  resolve('[' + lines.join(',') + ']');
+                }
               });
             }));
 
@@ -94,13 +101,14 @@ var getMessages = exports.getMessages = function () {
       }
     }, _callee3, this);
   }));
-  return function getMessages(_x4, _x5, _x6, _x7) {
-    return ref.apply(this, arguments);
+
+  return function getMessagesJson(_x4, _x5, _x6, _x7) {
+    return _ref3.apply(this, arguments);
   };
 }();
 
 var requestedRecently = exports.requestedRecently = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
+  var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
     var st, values;
     return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
@@ -123,13 +131,14 @@ var requestedRecently = exports.requestedRecently = function () {
       }
     }, _callee4, this);
   }));
+
   return function requestedRecently() {
-    return ref.apply(this, arguments);
+    return _ref4.apply(this, arguments);
   };
 }();
 
 var deleteOldMessages = exports.deleteOldMessages = function () {
-  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
+  var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
     var twoDaysAgo, statement;
     return _regenerator2.default.wrap(function _callee5$(_context5) {
       while (1) {
@@ -147,8 +156,9 @@ var deleteOldMessages = exports.deleteOldMessages = function () {
       }
     }, _callee5, this);
   }));
+
   return function deleteOldMessages() {
-    return ref.apply(this, arguments);
+    return _ref5.apply(this, arguments);
   };
 }();
 
