@@ -51,6 +51,7 @@ exports.daysToMs = daysToMs;
 exports.minutesToMs = minutesToMs;
 exports.missingFromFirst = missingFromFirst;
 exports.isConnected = isConnected;
+exports.allowCORS = allowCORS;
 
 var _chat = require('./chat');
 
@@ -76,4 +77,10 @@ function missingFromFirst(firstArr, secondArr) {
 
 function isConnected(channel) {
   return _chat2.default.channels.includes('#' + channel);
+}
+
+function allowCORS(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
 }

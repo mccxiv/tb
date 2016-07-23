@@ -10,10 +10,14 @@ setInterval(() => {
 }, 30000);
 
 async function createTables() {
-  db.run('CREATE TABLE IF NOT EXISTS lines (at INTEGER, channel TEXT, line TEXT)');
-  db.run('CREATE TABLE IF NOT EXISTS requests (channel TEXT UNIQUE, at INTEGER)');
-  db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
-  db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
+  const make = 'CREATE TABLE IF NOT EXISTS ';
+  db.run(make + 'lines (at INTEGER, channel TEXT, line TEXT)', makeIndexes);
+  db.run(make + 'requests (channel TEXT UNIQUE, at INTEGER)');
+
+  function makeIndexes() {
+    db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
+    db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
+  }
 }
 
 export function connectToDatabase(host) {

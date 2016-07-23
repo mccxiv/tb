@@ -23,14 +23,20 @@ var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var createTables = function () {
   var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+    var make, makeIndexes;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            db.run('CREATE TABLE IF NOT EXISTS lines (at INTEGER, channel TEXT, line TEXT)');
-            db.run('CREATE TABLE IF NOT EXISTS requests (channel TEXT UNIQUE, at INTEGER)');
-            db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
-            db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
+            makeIndexes = function makeIndexes() {
+              db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
+              db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
+            };
+
+            make = 'CREATE TABLE IF NOT EXISTS ';
+
+            db.run(make + 'lines (at INTEGER, channel TEXT, line TEXT)', makeIndexes);
+            db.run(make + 'requests (channel TEXT UNIQUE, at INTEGER)');
 
           case 4:
           case 'end':
