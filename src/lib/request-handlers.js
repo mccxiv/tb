@@ -40,7 +40,8 @@ export async function respond(req, res) {
   if (!channel) res.status(400).json({error: 'Missing channel.'});
   else {
     res.header('Content-Type', 'application/json');
-    try {res.send(await getMessagesJson(channel, after, before, limit))}
+    const params = [channel.toLowerCase(), after, before, limit];
+    try {res.send(await getMessagesJson(...params))}
     catch (e) {res.status(500).json({error: 'Server error, sorry!'})}
   }
 }
