@@ -17,6 +17,7 @@ async function createTables() {
   function makeIndexes() {
     db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
     db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
+    db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
   }
 }
 
@@ -41,13 +42,22 @@ export async function getMessagesJson(channel, after, before, limit) {
     'ORDER BY at DESC LIMIT ?';
   const values = [channel, after, before, limit];
   return new Promise((resolve, reject) => {
-    db.all(statement, values, (e, results) => {
+    const rows = [];
+
+    db.each(statement, values, each, complete);
+
+    function each(e, row) {
+      if (e) reject(e);
+      rows.push(row)
+    }
+
+    function complete(e) {
       if (e) reject(e);
       else {
-        const lines = results.map(r => r.line).reverse();
+        const lines = rows.map(r => r.line).reverse();
         resolve('['+lines.join(',')+']');
       }
-    });
+    }
   });
 }
 

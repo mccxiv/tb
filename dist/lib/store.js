@@ -31,6 +31,7 @@ var createTables = function () {
             makeIndexes = function makeIndexes() {
               db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
               db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
+              db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
             };
 
             make = 'CREATE TABLE IF NOT EXISTS ';
@@ -90,14 +91,23 @@ var getMessagesJson = exports.getMessagesJson = function () {
             statement = 'SELECT * FROM lines WHERE ' + 'channel = ? AND at > ? AND at < ? ' + 'ORDER BY at DESC LIMIT ?';
             values = [channel, after, before, limit];
             return _context3.abrupt('return', new _promise2.default(function (resolve, reject) {
-              db.all(statement, values, function (e, results) {
+              var rows = [];
+
+              db.each(statement, values, each, complete);
+
+              function each(e, row) {
+                if (e) reject(e);
+                rows.push(row);
+              }
+
+              function complete(e) {
                 if (e) reject(e);else {
-                  var lines = results.map(function (r) {
+                  var lines = rows.map(function (r) {
                     return r.line;
                   }).reverse();
                   resolve('[' + lines.join(',') + ']');
                 }
-              });
+              }
             }));
 
           case 3:
