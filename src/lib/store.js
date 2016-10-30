@@ -16,8 +16,7 @@ async function createTables() {
 
   function makeIndexes() {
     db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
-    db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
-    db.run('CREATE INDEX IF NOT EXISTS channel_index ON lines (channel)');
+    db.run('CREATE INDEX IF NOT EXISTS message_search ON lines (channel, at)');
   }
 }
 
