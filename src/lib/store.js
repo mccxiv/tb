@@ -11,13 +11,23 @@ setInterval(() => {
 
 async function createTables() {
   const make = 'CREATE TABLE IF NOT EXISTS ';
-  db.run(make + 'lines (at INTEGER, channel TEXT, username TEXT, line TEXT)', makeIndexes);
+  db.run(make + 'lines (at INTEGER, channel TEXT, line TEXT)', makeIndexes);
+  db.run(make + 'lines (at INTEGER, channel TEXT, line TEXT, username TEXT)', makeIndexes);
   db.run(make + 'requests (channel TEXT UNIQUE, at INTEGER)');
 
   function makeIndexes() {
     db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
-    db.run('CREATE INDEX IF NOT EXISTS username_index ON lines (username)');
     db.run('CREATE INDEX IF NOT EXISTS message_search ON lines (channel, at)');
+
+    db.get('SELECT username FROM lines LIMIT 1', [], (err, row) => {
+      if (err) {
+        db.run('ALTER TABLE lines ADD COLUMN username TEXT', () => {
+          db.run('CREATE INDEX IF NOT EXISTS username_index ON lines (username)');
+        })
+      } else {
+        db.run('CREATE INDEX IF NOT EXISTS username_index ON lines (username)');
+      }
+    });
   }
 }
 
@@ -32,7 +42,7 @@ export async function saveMessage(channel, user, message) {
 
   const data = {channel, user, message, at: Date.now()};
   const statement = 'INSERT INTO lines VALUES(?, ?, ?, ?)';
-  const values = [data.at, channel, data.user.username, JSON.stringify(data)];
+  const values = [data.at, channel, JSON.stringify(data), data.user.username];
   db.run(statement, values);
 }
 
