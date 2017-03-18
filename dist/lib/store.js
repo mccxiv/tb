@@ -30,12 +30,13 @@ var createTables = function () {
           case 0:
             makeIndexes = function makeIndexes() {
               db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
+              db.run('CREATE INDEX IF NOT EXISTS username_index ON lines (username)');
               db.run('CREATE INDEX IF NOT EXISTS message_search ON lines (channel, at)');
             };
 
             make = 'CREATE TABLE IF NOT EXISTS ';
 
-            db.run(make + 'lines (at INTEGER, channel TEXT, line TEXT)', makeIndexes);
+            db.run(make + 'lines (at INTEGER, channel TEXT, username TEXT, line TEXT)', makeIndexes);
             db.run(make + 'requests (channel TEXT UNIQUE, at INTEGER)');
 
           case 4:
@@ -62,8 +63,8 @@ var saveMessage = exports.saveMessage = function () {
             if (channel.charAt(0) === '#') channel = channel.substring(1);
 
             data = { channel: channel, user: user, message: message, at: Date.now() };
-            statement = 'INSERT INTO lines VALUES(?, ?, ?)';
-            values = [data.at, channel, (0, _stringify2.default)(data)];
+            statement = 'INSERT INTO lines VALUES(?, ?, ?, ?)';
+            values = [data.at, channel, data.user.username, (0, _stringify2.default)(data)];
 
             db.run(statement, values);
 
@@ -81,7 +82,7 @@ var saveMessage = exports.saveMessage = function () {
 }();
 
 var getMessagesJson = exports.getMessagesJson = function () {
-  var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(channel, after, before, limit) {
+  var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(channel, after, before, limit, username) {
     var statement, values;
     return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
@@ -89,6 +90,13 @@ var getMessagesJson = exports.getMessagesJson = function () {
           case 0:
             statement = 'SELECT * FROM lines WHERE ' + 'channel = ? AND at > ? AND at < ? ' + 'ORDER BY at DESC LIMIT ?';
             values = [channel, after, before, limit];
+
+
+            if (username !== false) {
+              statement = 'SELECT * FROM lines WHERE ' + 'channel = ? AND at > ? AND at < ? AND username = ? ' + 'ORDER BY at DESC LIMIT ?';
+              values = [channel, after, before, username, limit];
+            }
+
             return _context3.abrupt('return', new _promise2.default(function (resolve, reject) {
               var rows = [];
 
@@ -109,7 +117,7 @@ var getMessagesJson = exports.getMessagesJson = function () {
               }
             }));
 
-          case 3:
+          case 4:
           case 'end':
             return _context3.stop();
         }
@@ -117,7 +125,7 @@ var getMessagesJson = exports.getMessagesJson = function () {
     }, _callee3, this);
   }));
 
-  return function getMessagesJson(_x4, _x5, _x6, _x7) {
+  return function getMessagesJson(_x4, _x5, _x6, _x7, _x8) {
     return _ref3.apply(this, arguments);
   };
 }();

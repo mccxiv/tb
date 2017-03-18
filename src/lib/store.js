@@ -11,11 +11,12 @@ setInterval(() => {
 
 async function createTables() {
   const make = 'CREATE TABLE IF NOT EXISTS ';
-  db.run(make + 'lines (at INTEGER, channel TEXT, line TEXT)', makeIndexes);
+  db.run(make + 'lines (at INTEGER, channel TEXT, username TEXT, line TEXT)', makeIndexes);
   db.run(make + 'requests (channel TEXT UNIQUE, at INTEGER)');
 
   function makeIndexes() {
     db.run('CREATE INDEX IF NOT EXISTS at_index ON lines (at)');
+    db.run('CREATE INDEX IF NOT EXISTS username_index ON lines (username)');
     db.run('CREATE INDEX IF NOT EXISTS message_search ON lines (channel, at)');
   }
 }
@@ -30,16 +31,24 @@ export async function saveMessage(channel, user, message) {
   if (channel.charAt(0) === '#') channel = channel.substring(1);
 
   const data = {channel, user, message, at: Date.now()};
-  const statement = 'INSERT INTO lines VALUES(?, ?, ?)';
-  const values = [data.at, channel, JSON.stringify(data)];
+  const statement = 'INSERT INTO lines VALUES(?, ?, ?, ?)';
+  const values = [data.at, channel, data.user.username, JSON.stringify(data)];
   db.run(statement, values);
 }
 
-export async function getMessagesJson(channel, after, before, limit) {
-  const statement = 'SELECT * FROM lines WHERE ' +
+export async function getMessagesJson(channel, after, before, limit, username) {
+  let statement = 'SELECT * FROM lines WHERE ' +
     'channel = ? AND at > ? AND at < ? ' +
     'ORDER BY at DESC LIMIT ?';
-  const values = [channel, after, before, limit];
+  let values = [channel, after, before, limit];
+
+  if (username !== false) {
+    statement = 'SELECT * FROM lines WHERE ' +
+    'channel = ? AND at > ? AND at < ? AND username = ? ' +
+    'ORDER BY at DESC LIMIT ?';
+    values = [channel, after, before, username, limit];
+  }
+
   return new Promise((resolve, reject) => {
     const rows = [];
 
