@@ -18,6 +18,10 @@ const validate = {
   limit(number) {
     number = Number(number);
     return Number.isInteger(number)? number : 30;
+  },
+  username(string) {
+    string = typeof string === 'undefined' ? '' : String(string).trim();
+    return String(string).length > 0 ? string : false;
   }
 };
 
@@ -37,10 +41,11 @@ export async function respond(req, res) {
   const after = validate.after(req.query.after);
   const before = validate.before(req.query.before);
   const limit = validate.limit(req.query.limit);
+  const username = validate.username(req.query.username);
   if (!channel) res.status(400).json({error: 'Missing channel.'});
   else {
     res.header('Content-Type', 'application/json');
-    const params = [channel.toLowerCase(), after, before, limit];
+    const params = [channel.toLowerCase(), after, before, limit, username];
     try {res.send(await getMessagesJson(...params))}
     catch (e) {res.status(500).json({error: 'Server error, sorry!'})}
   }
