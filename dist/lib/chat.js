@@ -106,6 +106,6 @@ var chat = new _tmi2.default.client({ connection: { reconnect: true } });
 chat.on('action', _store.saveMessage);
 chat.on('chat', _store.saveMessage);
 chat.on('cheer', _store.saveMessage);
-chat.once('connected', joinInitialChannels);
+chat.on('connected', joinInitialChannels);
 
 exports.default = chat;

@@ -7,7 +7,7 @@ const chat = new tmi.client({connection: {reconnect: true}});
 chat.on('action', saveMessage);
 chat.on('chat', saveMessage);
 chat.on('cheer', saveMessage);
-chat.once('connected', joinInitialChannels);
+chat.on('connected', joinInitialChannels);
 
 async function joinInitialChannels() {
   try {(await requestedRecently()).forEach(joinQueued)}
