@@ -22,7 +22,7 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var createTables = function () {
-  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+  var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
     var make, makeIndexes;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -53,7 +53,7 @@ var createTables = function () {
 }();
 
 var saveMessage = exports.saveMessage = function () {
-  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(channel, user, message) {
+  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(channel, user, message) {
     var data, statement, values;
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
@@ -82,7 +82,7 @@ var saveMessage = exports.saveMessage = function () {
 }();
 
 var getMessagesJson = exports.getMessagesJson = function () {
-  var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee3(channel, after, before, limit, username) {
+  var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(channel, after, before, limit, username) {
     var statement, values;
     return _regenerator2.default.wrap(function _callee3$(_context3) {
       while (1) {
@@ -131,7 +131,7 @@ var getMessagesJson = exports.getMessagesJson = function () {
 }();
 
 var requestedRecently = exports.requestedRecently = function () {
-  var _ref4 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee4() {
+  var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4() {
     var st, values;
     return _regenerator2.default.wrap(function _callee4$(_context4) {
       while (1) {
@@ -161,7 +161,7 @@ var requestedRecently = exports.requestedRecently = function () {
 }();
 
 var deleteOldMessages = exports.deleteOldMessages = function () {
-  var _ref5 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee5() {
+  var _ref5 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee5() {
     var twoDaysAgo, statement;
     return _regenerator2.default.wrap(function _callee5$(_context5) {
       while (1) {

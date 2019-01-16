@@ -1,5 +1,6 @@
 import tmi from 'tmi.js';
 import {saveMessage, requestedRecently} from './store';
+import {joinQueued} from './join-queue'
 
 const chat = new tmi.client({connection: {reconnect: true}});
 
@@ -9,12 +10,17 @@ chat.on('cheer', saveMessage);
 chat.once('connected', joinInitialChannels);
 
 async function joinInitialChannels() {
-  try {(await requestedRecently()).forEach(chat.join.bind(chat))}
+  try {(await requestedRecently()).forEach(joinQueued)}
   catch(e) {setTimeout(joinInitialChannels, 5000)}
 }
 
 export async function startChatClient() {
   chat.connect();
+}
+
+export async function joinUnsafeNotQueued (channel) {
+  console.log('join >', channel)
+  chat.join(channel)
 }
 
 export default chat;

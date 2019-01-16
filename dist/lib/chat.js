@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.startChatClient = undefined;
+exports.joinUnsafeNotQueued = exports.startChatClient = undefined;
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -14,7 +14,7 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
 var joinInitialChannels = function () {
-  var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
+  var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -24,7 +24,7 @@ var joinInitialChannels = function () {
             return (0, _store.requestedRecently)();
 
           case 3:
-            _context.t0 = chat.join.bind(chat);
+            _context.t0 = _joinQueue.joinQueued;
 
             _context.sent.forEach(_context.t0);
 
@@ -49,7 +49,7 @@ var joinInitialChannels = function () {
 }();
 
 var startChatClient = exports.startChatClient = function () {
-  var _ref2 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2() {
+  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
     return _regenerator2.default.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -69,11 +69,35 @@ var startChatClient = exports.startChatClient = function () {
   };
 }();
 
+var joinUnsafeNotQueued = exports.joinUnsafeNotQueued = function () {
+  var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(channel) {
+    return _regenerator2.default.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            console.log('join >', channel);
+            chat.join(channel);
+
+          case 2:
+          case 'end':
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  return function joinUnsafeNotQueued(_x) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
 var _tmi = require('tmi.js');
 
 var _tmi2 = _interopRequireDefault(_tmi);
 
 var _store = require('./store');
+
+var _joinQueue = require('./join-queue');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

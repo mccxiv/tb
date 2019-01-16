@@ -18,7 +18,7 @@ var _isInteger = require('babel-runtime/core-js/number/is-integer');
 var _isInteger2 = _interopRequireDefault(_isInteger);
 
 var respond = exports.respond = function () {
-  var _ref3 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(req, res) {
+  var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(req, res) {
     var channel, after, before, limit, username, params;
     return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
@@ -75,11 +75,9 @@ var respond = exports.respond = function () {
 exports.logRequest = logRequest;
 exports.joinChannel = joinChannel;
 
-var _chat = require('./chat');
-
-var _chat2 = _interopRequireDefault(_chat);
-
 var _helpers = require('./helpers');
+
+var _joinQueue = require('./join-queue');
 
 var _store = require('./store');
 
@@ -111,7 +109,7 @@ var validate = {
 function logRequest(_ref, res, next) {
   var channel = _ref.params.channel;
 
-  console.log('Requested channel: ' + channel);
+  console.log('request >', channel);
   if (channel) (0, _store.saveChannelRequest)(channel.toLowerCase());
   next();
 }
@@ -119,6 +117,6 @@ function logRequest(_ref, res, next) {
 function joinChannel(_ref2, res, next) {
   var channel = _ref2.params.channel;
 
-  if (channel && !(0, _helpers.isConnected)(channel)) _chat2.default.join(channel);
+  if (channel && !(0, _helpers.isConnected)(channel)) (0, _joinQueue.joinQueued)(channel);
   next();
 }

@@ -1,5 +1,5 @@
-import chat from './chat';
 import {isConnected} from './helpers'
+import {joinQueued} from './join-queue'
 import {saveChannelRequest, getMessagesJson} from './store';
 
 const validate = {
@@ -26,13 +26,13 @@ const validate = {
 };
 
 export function logRequest({params: {channel}}, res, next) {
-  console.log('Requested channel: ' + channel);
+  console.log('request >', channel);
   if (channel) saveChannelRequest(channel.toLowerCase());
   next();
 }
 
 export function joinChannel({params: {channel}}, res, next) {
-  if (channel && !isConnected(channel)) chat.join(channel);
+  if (channel && !isConnected(channel)) joinQueued(channel);
   next();
 }
 
