@@ -77,7 +77,7 @@ export function saveChannelRequest(channel) {
 
 export async function requestedRecently() {
   const st = 'SELECT channel FROM requests WHERE at > ?';
-  const values = [Date.now() - daysToMs(2)];
+  const values = [Date.now() - daysToMs(0.5)];
   return new Promise((resolve, reject) => {
     db.all(st, values, (e, results) => {
       if (e) reject(e);
@@ -87,7 +87,7 @@ export async function requestedRecently() {
 }
 
 export async function deleteOldMessages() {
-  const twoDaysAgo = Date.now() - daysToMs(2);
+  const twoDaysAgo = Date.now() - daysToMs(0.5);
   const statement = 'DELETE FROM lines WHERE at < ?';
   db.run(statement, [twoDaysAgo]);
 }

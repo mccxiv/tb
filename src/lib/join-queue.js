@@ -16,3 +16,7 @@ export function joinQueued (channel) {
 function joinOne () {
   if (queue.length) joinUnsafeNotQueued(queue.shift())
 }
+
+setInterval(() => {
+  console.log('Join queue length:', queue.length);
+}, 10000);
