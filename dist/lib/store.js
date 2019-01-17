@@ -138,7 +138,7 @@ var requestedRecently = exports.requestedRecently = function () {
         switch (_context4.prev = _context4.next) {
           case 0:
             st = 'SELECT channel FROM requests WHERE at > ?';
-            values = [Date.now() - (0, _helpers.daysToMs)(2)];
+            values = [Date.now() - (0, _helpers.daysToMs)(0.5)];
             return _context4.abrupt('return', new _promise2.default(function (resolve, reject) {
               db.all(st, values, function (e, results) {
                 if (e) reject(e);else resolve(results.map(function (r) {
@@ -167,7 +167,7 @@ var deleteOldMessages = exports.deleteOldMessages = function () {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            twoDaysAgo = Date.now() - (0, _helpers.daysToMs)(2);
+            twoDaysAgo = Date.now() - (0, _helpers.daysToMs)(0.5);
             statement = 'DELETE FROM lines WHERE at < ?';
 
             db.run(statement, [twoDaysAgo]);

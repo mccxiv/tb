@@ -22,3 +22,7 @@ function joinQueued(channel) {
 function joinOne() {
   if (queue.length) (0, _chat.joinUnsafeNotQueued)(queue.shift());
 }
+
+setInterval(function () {
+  console.log('Join queue length:', queue.length);
+}, 10000);
