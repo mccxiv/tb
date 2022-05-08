@@ -1,6 +1,6 @@
 import {isConnected} from './helpers'
 import {joinQueued} from './join-queue'
-import {saveChannelRequest, getMessagesJson} from './store';
+import {saveChannelRequest, getMessages} from './store';
 
 const validate = {
   after(timestamp) {
@@ -46,7 +46,7 @@ export async function respond(req, res) {
   else {
     res.header('Content-Type', 'application/json');
     const params = [channel.toLowerCase(), after, before, limit, username];
-    try {res.send(await getMessagesJson(...params))}
+    try {res.send(await getMessages(...params))}
     catch (e) {res.status(500).json({error: 'Server error, sorry!'})}
   }
 }
