@@ -3,7 +3,7 @@ import {requestedRecently} from './store';
 
 export async function leaveOldChannels() {
   const noHashChannels = chat.channels.map((c) => c.substring(1));
-  const recent = await requestedRecently();
+  const recent = requestedRecently();
   const oldChannels = missingFromFirst(recent, noHashChannels);
   oldChannels.forEach((channel) => chat.part(channel));
 }

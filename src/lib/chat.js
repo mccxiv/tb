@@ -10,7 +10,7 @@ chat.on('cheer', saveMessage);
 chat.on('connected', joinInitialChannels);
 
 async function joinInitialChannels() {
-  try {(await requestedRecently()).forEach(joinQueued)}
+  try {requestedRecently().forEach(joinQueued)}
   catch(e) {setTimeout(joinInitialChannels, 5000)}
 }
 

@@ -36,7 +36,7 @@ export function joinChannel({params: {channel}}, res, next) {
   next();
 }
 
-export async function respond(req, res) {
+export function respond(req, res) {
   const channel = req.params.channel;
   const after = validate.after(req.query.after);
   const before = validate.before(req.query.before);
@@ -46,7 +46,7 @@ export async function respond(req, res) {
   else {
     res.header('Content-Type', 'application/json');
     const params = [channel.toLowerCase(), after, before, limit, username];
-    try {res.send(await getMessages(...params))}
+    try {res.send(getMessages(...params))}
     catch (e) {res.status(500).json({error: 'Server error, sorry!'})}
   }
 }

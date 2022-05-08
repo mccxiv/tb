@@ -13,7 +13,7 @@ async function handleNextRequestMaybe () {
   if (!currentReqRes && reqResQueue.length) {
     console.log(`Responding... There are ${reqResQueue.length} requests pending`)
     currentReqRes = reqResQueue.shift()
-    try { await respond(currentReqRes.req, currentReqRes.res) }
+    try { respond(currentReqRes.req, currentReqRes.res) }
     finally { currentReqRes = null }
   }
 }
