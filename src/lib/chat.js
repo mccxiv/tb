@@ -20,7 +20,8 @@ export async function startChatClient() {
 
 export async function joinUnsafeNotQueued (channel) {
   console.log('join >', channel)
-  chat.join(channel)
+  try { await chat.join(channel) }
+  catch (e) { console.log('join channel error >', e) }
 }
 
 export default chat;
