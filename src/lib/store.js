@@ -10,8 +10,10 @@ const state = {
 }
 
 setInterval(() => {
-  console.log('New messsages: ' + counter);
-  counter = 0;
+  if (counter) {
+    console.log('New messages: ' + counter);
+    counter = 0;
+  }
 }, 30000);
 
 export async function saveMessage(channel, user, message) {
@@ -40,11 +42,11 @@ export function saveChannelRequest(channel) {
 
 export function requestedRecently() {
   return Object.entries(state.requests)
-    .filter(([, at]) => at > Date.now() - daysToMs(0.5))
+    .filter(([, at]) => at > Date.now() - daysToMs(2))
     .map(([channel]) => channel);
 }
 
 export async function deleteOldMessages() {
-  const twoDaysAgo = Date.now() - daysToMs(0.5);
+  const twoDaysAgo = Date.now() - daysToMs(2);
   state.messages = state.messages.filter(message => message.at > twoDaysAgo);
 }

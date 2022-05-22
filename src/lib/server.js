@@ -4,7 +4,7 @@ import {logRequest, joinChannel} from './request-handlers';
 import {queueRequest} from './request-queue'
 
 export function startServer(port) {
-  console.log('Server starting');
+  console.log('Server starting on', port);
   const app = express();
   app.use(allowCORS);
   app.get('/v1/:channel', logRequest, joinChannel, queueRequest);
