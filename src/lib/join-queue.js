@@ -2,7 +2,7 @@ import {joinUnsafeNotQueued} from './chat'
 
 const queue = []
 
-setInterval(joinOne, 1000)
+setInterval(joinOne, 2000)
 
 export function joinQueued (channel) {
   if (!queue.includes(channel)) queue.push(channel)
