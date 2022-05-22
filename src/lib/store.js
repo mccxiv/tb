@@ -11,10 +11,10 @@ const state = {
 
 setInterval(() => {
   if (counter) {
-    console.log('New messages: ' + counter);
+    console.log('Messages per minute: ' + counter);
     counter = 0;
   }
-}, 30000);
+}, 60000);
 
 export async function saveMessage(channel, user, message) {
   counter++;
