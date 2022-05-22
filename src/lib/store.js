@@ -33,7 +33,7 @@ export function getMessages(channel, after, before, limit, username) {
       const usernameMet = username ? message.user.username === username : true
       return channelMatch && afterMet && beforeMet && usernameMet
     })
-    .slice(0, limit);
+    .slice(limit * -1); // Slice from the back
 }
 
 export function saveChannelRequest(channel) {
