@@ -11,7 +11,7 @@ const state = {
 
 setInterval(() => {
   if (counter) {
-    console.log('Messages per minute: ' + counter);
+    console.log('Messages: ' + state.messages.length + ', per minute: ' + counter);
     counter = 0;
   }
 }, 60000);
@@ -46,7 +46,22 @@ export function requestedRecently() {
     .map(([channel]) => channel);
 }
 
-export async function deleteOldMessages() {
+export function deleteOldMessages() {
   const twoDaysAgo = Date.now() - daysToMs(2);
   state.messages = state.messages.filter(message => message.at > twoDaysAgo);
+}
+
+export function deleteExcessMessagesPerChannel() {
+  const maxMessagesPerChannel = 150
+  const messageCount = {}
+  state.messages = state.messages
+    .reverse()
+    .filter(message => {
+      if (!messageCount[message.channel]) messageCount[message.channel] = 0
+      if (messageCount[message.channel] < maxMessagesPerChannel) {
+        messageCount[message.channel]++
+        return true
+      } else return false
+    })
+    .reverse()
 }
